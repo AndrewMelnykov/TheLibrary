@@ -4,7 +4,7 @@
 <br>
 <h1>This is the sign-up page!</h1>
 <p>Here you can create your account to start using the project The Library!</p>
-<form>
+<form method="POST">
     {{signup_form.hidden_tag()}}
     {{signup_form.name.label}}
     {{signup_form.name(class="form-control")}}

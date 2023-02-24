@@ -1,10 +1,22 @@
 {% extends 'base.html'%}
 
 {% block content %}
+
 <br>
 <h1>This is the login page!</h1>
 <p>Here you can login using your credentials to review books in your personal library!</p>
-<form>
+{%if username%}
+{% for message in get_flashed_messages() %}
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  Hello <strong>{{username}}, </strong> {{message}}!
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+
+{% endfor %}
+{% else %}
+<form method="POST">
     {{login_form.hidden_tag()}}
     {{login_form.username.label}}
     {{login_form.username(class="form-control")}}
@@ -13,5 +25,6 @@
     <br>
     {{login_form.submitbutton(class="btn btn-dark")}}
 </form>
+{% endif %}
 
 {% endblock %}
