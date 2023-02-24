@@ -4,6 +4,20 @@
 <br>
 <h1>This is the sign-up page!</h1>
 <p>Here you can create your account to start using the project The Library!</p>
-
+<form>
+    {{signup_form.hidden_tag()}}
+    {{signup_form.name.label}}
+    {{signup_form.name(class="form-control")}}
+    {{signup_form.surname.label}}
+    {{signup_form.surname(class="form-control")}}
+    {{signup_form.username.label}}
+    {{signup_form.username(class="form-control")}}
+    {{signup_form.password.label}}
+    {{signup_form.password(class="form-control")}}
+    {{signup_form.password.label}}
+    {{signup_form.password(class="form-control")}}
+    <br>
+    {{signup_form.submitbutton(class="btn btn-dark")}}
+</form>
 
 {% endblock %}

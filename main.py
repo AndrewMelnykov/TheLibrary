@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for
-from forms import LoginForm
+from forms import LoginForm, SignupForm
 
 
 app = Flask(__name__)
@@ -27,9 +27,10 @@ def login():
     login_form = LoginForm()
     return render_template("login.html", login_form = login_form)
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    return render_template("signup.html")
+    signup_form = SignupForm()
+    return render_template("signup.html", signup_form=signup_form)
 
 
 @app.errorhandler(404)
