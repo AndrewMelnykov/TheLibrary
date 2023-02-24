@@ -4,6 +4,14 @@
 <br>
 <h1>This is the login page!</h1>
 <p>Here you can login using your credentials to review books in your personal library!</p>
-
+<form>
+    {{login_form.hidden_tag()}}
+    {{login_form.username.label}}
+    {{login_form.username(class="form-control")}}
+    {{login_form.password.label}}
+    {{login_form.password(class="form-control")}}
+    <br>
+    {{login_form.submitbutton(class="btn btn-dark")}}
+</form>
 
 {% endblock %}

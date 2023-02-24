@@ -1,9 +1,14 @@
 from flask import Flask, render_template, url_for
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from forms import LoginForm
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'dev_secret_key'
+
+
+
+
+
 
 @app.route('/home')
 def home():
@@ -17,14 +22,14 @@ def my_books():
 def authors():
     return render_template("authors.html")
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    login_form = LoginForm()
+    return render_template("login.html", login_form = login_form)
 
 @app.route('/signup')
 def signup():
     return render_template("signup.html")
-
 
 
 @app.errorhandler(404)
