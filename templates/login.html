@@ -20,11 +20,19 @@
     {{login_form.hidden_tag()}}
     {{login_form.username.label}}
     {{login_form.username(class="form-control")}}
+    {{login_form.email.label}}
+    {{login_form.email(class="form-control")}}
     {{login_form.password.label}}
     {{login_form.password(class="form-control")}}
     <br>
     {{login_form.submitbutton(class="btn btn-dark")}}
 </form>
 {% endif %}
+
+<h1>Users in db</h1>
+{%for user in all_users %}
+<p>{{user.username}}</p>
+{%endfor%}
+
 
 {% endblock %}
