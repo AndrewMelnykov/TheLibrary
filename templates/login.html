@@ -16,6 +16,7 @@
 
 {% endfor %}
 {% else %}
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 <form method="POST">
     {{login_form.hidden_tag()}}
     {{login_form.username.label}}
@@ -27,6 +28,7 @@
     <br>
     {{login_form.submitbutton(class="btn btn-dark")}}
 </form>
+</div>
 {% endif %}
 {% if all_users != 0 %}
 <h1>Users in db</h1>
