@@ -28,11 +28,17 @@
     {{login_form.submitbutton(class="btn btn-dark")}}
 </form>
 {% endif %}
-
+{% if all_users != 0 %}
 <h1>Users in db</h1>
-{%for user in all_users %}
-<p>{{user.username}}</p>
+<table class="table table table-dark table-hover table-striped">
+    <th>username</th>
+    <th>email</th>
+    {%for user in all_users %}
+<tr>
+    <td>{{user.username}}</td>
+    <td>{{user.email}}</td>
+</tr>
 {%endfor%}
-
-
+</table>
+{%endif%}
 {% endblock %}
