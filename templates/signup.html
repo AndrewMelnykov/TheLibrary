@@ -13,12 +13,44 @@
     {{signup_form.surname(class="form-control")}}
     {{signup_form.username.label}}
     {{signup_form.username(class="form-control")}}
+    {{signup_form.email.label}}
+    {{signup_form.email(class="form-control")}}
     {{signup_form.password.label}}
     {{signup_form.password(class="form-control")}}
-    {{signup_form.password.label}}
-    {{signup_form.password(class="form-control")}}
+
+    {% for message in get_flashed_messages() %}
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  {{message}}!
+</div>
+
+
+{% endfor %}
+
+
+    {{signup_form.password2.label}}
+    {{signup_form.password2(class="form-control")}}
     <br>
     {{signup_form.submitbutton(class="btn btn-dark")}}
 </form>
 </div>
+{% if all_users %}
+<h1>Users in db</h1>
+<table class="table table table-dark table-hover table-striped">
+    <th>name</th>
+    <th>surname</th>
+    <th>username</th>
+    <th>email</th>
+    <th>password</th>
+    {%for user in all_users %}
+<tr>
+    <td>{{user.name}}</td>
+    <td>{{user.surname}}</td>
+    <td>{{user.username}}</td>
+    <td>{{user.email}}</td>
+    <td>{{user.password}}</td>
+</tr>
+{%endfor%}
+</table>
+{%endif%}
 {% endblock %}
