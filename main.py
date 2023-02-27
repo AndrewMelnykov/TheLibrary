@@ -43,21 +43,26 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     signup_form = SignupForm()
+    signup_form.email.data = " "
+    signup_form.password.data = " "
+    signup_form.name.data = " "
+    signup_form.surname.data = " "
+    signup_form.username.data = " "
 
     if signup_form.validate_on_submit():
         user = Users.query.filter_by(email=signup_form.email.data).first()
         if user is None:
-            user = Users(name = signup_form.name.data, surname=signup_form.surname.data, username = signup_form.username.data, email=signup_form.email.data, password=signup_form.password.data )
+            user = Users(name = signup_form.name.data, surname=signup_form.surname.data, username = signup_form.username.data, email=signup_form.email.data, password_hash=signup_form.password.data )
             db.session.add(user)
             db.session.commit()
-            signup_form.email.data = ""
-            signup_form.password.data = ""
-            signup_form.name.data = ""
-            signup_form.surname.data = ""
-            signup_form.username.data = ""
+            signup_form.email.data = " "
+            signup_form.password.data = " "
+            signup_form.name.data = " "
+            signup_form.surname.data = " "
+            signup_form.username.data = " "
             flash("You've logged in successfully!")
-    elif signup_form.password.data != signup_form.password2.data:
-        flash("Please typ identical passwords!")
+        if signup_form.password.data != signup_form.password2.data:
+            flash("Please typ identical passwords!")
     all_users = Users.query.order_by(Users.date_added)
     return render_template("signup.html", signup_form=signup_form, all_users = all_users)
 
