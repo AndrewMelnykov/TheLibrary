@@ -4,6 +4,9 @@
 <br>
 <h1>Welcome to your personal library</h1>
 <p>You can review all books that you currently have!</p>
-
+<br>
+{% for message in get_flashed_messages() %}
+<p class="alert alert-success" >{{message}}</p>
+{% endfor %}
 
 {% endblock %}

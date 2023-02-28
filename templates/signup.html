@@ -17,22 +17,12 @@
     {{signup_form.email(class="form-control")}}
     {{signup_form.password.label}}
     {{signup_form.password(class="form-control")}}
-
-    {% for message in get_flashed_messages() %}
-
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  {{message}}!
-</div>
-
-
-{% endfor %}
-
-
     {{signup_form.password2.label}}
     {{signup_form.password2(class="form-control")}}
     <br>
     {{signup_form.submitbutton(class="btn btn-dark")}}
 </form>
+
 </div>
 {% if all_users %}
 <h1>Users in db</h1>

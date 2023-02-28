@@ -23,3 +23,11 @@ class Users(db.Model, UserMixin):
         return self.name
 
 
+class Book(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False, unique=False)
+    author_name = db.Column(db.String(100), nullable=False, unique=False)
+    author_surname = db.Column(db.String(100), nullable=True, unique=True)
+    year = db.Column(db.String(100), nullable=False, unique=True)
+    #reviews =
+    #readers =

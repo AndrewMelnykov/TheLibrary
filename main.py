@@ -1,11 +1,11 @@
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, flash, redirect, url_for
 from forms import LoginForm, SignupForm
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user, LoginManager
 from flask_migrate import Migrate
 
-
+#app config logic
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///users.db"
 db = SQLAlchemy(app)
@@ -13,6 +13,7 @@ app.config['SECRET_KEY'] = 'dev_secret_key'
 
 from models.db_models import Users
 
+#Login logic
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -21,8 +22,16 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return Users.query.get(int(user_id))
 
+#routes
 
 
+#create logout page
+@app.route('/logout', methods = ['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    flash("You have been logged out!")
+    return redirect(url_for('login'))
 
 
 @app.route('/home')
@@ -33,6 +42,7 @@ def home():
 @app.route('/mybooks')
 @login_required
 def my_books():
+    flash("You've been successfully logged in!")
     return render_template("mybooks.html")
 
 @app.route('/authors')
@@ -42,16 +52,15 @@ def authors():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
-
     if login_form.validate_on_submit():
         user = Users.query.filter_by(email=login_form.email.data).first()
-        if user is None:
-            user = Users(email=login_form.email.data, password=login_form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            login_form.email.data = ""
-            login_form.password.data = ""
-            flash("You've logged in successfully!")
+        if user:
+            if check_password_hash(user.password_hash, login_form.password.data):
+                login_user(user)
+                return redirect(url_for("my_books"))
+            else: flash("Worng password!")
+
+        else: flash("that user does not exist!")
     all_users = Users.query.order_by(Users.date_added)
     return render_template("login.html", login_form = login_form, all_users=all_users)
 

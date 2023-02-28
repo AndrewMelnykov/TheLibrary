@@ -5,17 +5,12 @@
 <br>
 <h1>This is the login page!</h1>
 <p>Here you can login using your credentials to review books in your personal library!</p>
-{%if username%}
+
 {% for message in get_flashed_messages() %}
-
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  Hello <strong>{{username}}, </strong> {{message}}!
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-
-
+<p class="alert alert-warning" >{{message}}</p>
 {% endfor %}
-{% else %}
+
+
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 <form method="POST">
     {{login_form.hidden_tag()}}
@@ -27,7 +22,7 @@
     {{login_form.submitbutton(class="btn btn-dark")}}
 </form>
 </div>
-{% endif %}
+
 {% if all_users %}
 <h1>Users in db</h1>
 <table class="table table table-dark table-hover table-striped">
@@ -36,7 +31,7 @@
     {%for user in all_users %}
 <tr>
     <td>{{user.email}}</td>
-    <td>{{user.password}}</td>
+    <td>{{user.password_hash}}</td>
 </tr>
 {%endfor%}
 </table>
