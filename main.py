@@ -1,7 +1,8 @@
 from flask import Flask, render_template, flash
 from forms import LoginForm, SignupForm
 from flask_sqlalchemy import SQLAlchemy
-
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin, login_user, login_required, logout_user, current_user, LoginManager
 from flask_migrate import Migrate
 
 
@@ -12,11 +13,25 @@ app.config['SECRET_KEY'] = 'dev_secret_key'
 
 from models.db_models import Users
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(int(user_id))
+
+
+
+
+
 @app.route('/home')
 def home():
     return render_template("home.html")
 
+
 @app.route('/mybooks')
+@login_required
 def my_books():
     return render_template("mybooks.html")
 
@@ -43,26 +58,20 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     signup_form = SignupForm()
-    signup_form.email.data = " "
-    signup_form.password.data = " "
-    signup_form.name.data = " "
-    signup_form.surname.data = " "
-    signup_form.username.data = " "
-
     if signup_form.validate_on_submit():
         user = Users.query.filter_by(email=signup_form.email.data).first()
         if user is None:
-            user = Users(name = signup_form.name.data, surname=signup_form.surname.data, username = signup_form.username.data, email=signup_form.email.data, password_hash=signup_form.password.data )
+            pw_hash = generate_password_hash(signup_form.password.data)
+            user = Users(name = signup_form.name.data, surname=signup_form.surname.data, username = signup_form.username.data, email=signup_form.email.data, password_hash=pw_hash)
             db.session.add(user)
             db.session.commit()
-            signup_form.email.data = " "
-            signup_form.password.data = " "
-            signup_form.name.data = " "
-            signup_form.surname.data = " "
-            signup_form.username.data = " "
             flash("You've logged in successfully!")
         if signup_form.password.data != signup_form.password2.data:
             flash("Please typ identical passwords!")
+        signup_form.name.data = ""
+        signup_form.surname.data = ""
+        signup_form.username.data = ""
+        signup_form.email.data = ""
     all_users = Users.query.order_by(Users.date_added)
     return render_template("signup.html", signup_form=signup_form, all_users = all_users)
 
