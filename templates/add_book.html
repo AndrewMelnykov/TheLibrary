@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+<form method="POST">
+    {{book_form.hidden_tag()}}
+    {{book_form.title.label}}
+    {{book_form.title(class="form-control")}}
+    {{book_form.author_name.label}}
+    {{book_form.author_name(class="form-control")}}
+    {{book_form.author_surname.label}}
+    {{book_form.author_surname(class="form-control")}}
+    {{book_form.year.label}}
+    {{book_form.year(class="form-control")}}
+    <br>
+    {{book_form.submitbutton(class="btn btn-dark")}}
+</form>
+
+    <table class="table table table-dark table-hover table-striped">
+    <th>title</th>
+    <th>author</th>
+    <th>year</th>
+    {%for book in books %}
+<tr>
+    <td>{{book.title}}</td>
+    <td>{{book.author_surname}} {{book.author_name}}</td>
+    <td>{{book.year}}</td>
+
+</tr>
+{%endfor%}
+</table>
+</div>
+
+{% endblock %}

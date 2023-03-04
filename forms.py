@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, EmailField
+from wtforms import StringField, SubmitField, PasswordField, EmailField, TextAreaField,RadioField, IntegerField
 from wtforms.validators import DataRequired, EqualTo
 
 
@@ -7,6 +7,18 @@ class LoginForm(FlaskForm):
     email = EmailField("email", validators=[DataRequired()])
     password = PasswordField("password", validators=[DataRequired()])
     submitbutton = SubmitField("Login")
+
+class ReveiwForm(FlaskForm):
+    text = TextAreaField("Review", validators=[DataRequired()])
+    rating = RadioField('Rating', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
+    submitbutton = SubmitField("Submit")
+
+class BookForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    author_name = StringField("Name", validators=[DataRequired()])
+    author_surname = StringField("Surname", validators=[DataRequired()])
+    year = IntegerField("Year", validators=[DataRequired()])
+    submitbutton = SubmitField("Submit")
 
 
 class SignupForm(FlaskForm):

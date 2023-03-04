@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for
-from forms import LoginForm, SignupForm
+from forms import LoginForm, SignupForm, ReveiwForm, BookForm
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user, LoginManager
@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///users.db"
 db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = 'dev_secret_key'
 
-from models.db_models import Users
+from models.db_models import Users, Review, Book
 
 #Login logic
 login_manager = LoginManager()
@@ -33,17 +33,39 @@ def logout():
     flash("You have been logged out!")
     return redirect(url_for('login'))
 
+@app.route('/addbook', methods=['GET', 'POST'])
+def addbook():
+    book_form = BookForm()
+    if book_form.validate_on_submit():
+        book = Book(title=book_form.title.data, author_name=book_form.author_name.data, author_surname=book_form.author_surname.data, year=book_form.year.data)
+        db.session.add(book)
+        db.session.commit()
+    books = Book.query.all()
+    return render_template("add_book.html", books=books, book_form=book_form)
+
 
 @app.route('/home')
 def home():
     return render_template("home.html")
 
+@app.route('/books/<id>')
+def book(id):
+    book = Book.query.get_or_404(id)
+    return render_template("book.html", book=book)
 
-@app.route('/mybooks')
+
+@app.route('/mybooks', methods = ['GET', 'POST'])
 @login_required
 def my_books():
     flash("You've been successfully logged in!")
-    return render_template("mybooks.html")
+
+    review_form = ReveiwForm()
+    if review_form.validate_on_submit():
+        review = Review(text = review_form.text.data, rating = review_form.rating.data, reviewer_id=current_user.id)
+        db.session.add(review)
+        db.session.commit()
+    all_reviews = Review.query.order_by(Review.id)
+    return render_template("mybooks.html", all_reviews=all_reviews, review_form=review_form)
 
 @app.route('/authors')
 def authors():

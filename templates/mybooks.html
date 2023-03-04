@@ -2,11 +2,35 @@
 
 {% block content %}
 <br>
+{% if current_user.is_authenticated %}
+<form method="POST" >
+    {{review_form.hidden_tag()}}
+    {{review_form.text.label}}
+    {{review_form.text(class="form-control")}}
+    {{review_form.rating.label}}
+    {{review_form.rating(class="form-control form-check")}}
+    <br>
+    {{review_form.submitbutton(class="btn btn-dark")}}
+</form>
 <h1>Welcome to your personal library</h1>
 <p>You can review all books that you currently have!</p>
 <br>
 {% for message in get_flashed_messages() %}
 <p class="alert alert-success" >{{message}}</p>
 {% endfor %}
+
+<table class="table table table-dark table-hover table-striped">
+    <th>review</th>
+    <th>rating</th>
+    <th>author</th>
+{%for review in all_reviews%}
+<tr>
+    <td>{{review.text}}</td>
+    <td>{{review.rating}}</td>
+    <td>{{review.reviewer.username}}</td>
+</tr>
+{%endfor%}
+</table>
+{% endif %}
 
 {% endblock %}
