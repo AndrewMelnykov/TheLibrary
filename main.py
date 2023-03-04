@@ -46,12 +46,20 @@ def addbook():
 
 @app.route('/home')
 def home():
-    return render_template("home.html")
+    books = Book.query.order_by(Book.id)
+    return render_template("home.html", books=books)
 
-@app.route('/books/<id>')
+@app.route('/books/<id>', methods=["GET", "POST"])
 def book(id):
     book = Book.query.get_or_404(id)
-    return render_template("book.html", book=book)
+
+    review_form = ReveiwForm()
+    if review_form.validate_on_submit():
+        review = Review(text = review_form.text.data, rating = review_form.rating.data, reviewer_id=current_user.id, book_id=book.id)
+        db.session.add(review)
+        db.session.commit()
+    reviews = Review.query.filter_by(book_id=book.id).all()
+    return render_template("book.html", book=book, reviews=reviews, review_form=review_form)
 
 
 @app.route('/mybooks', methods = ['GET', 'POST'])
