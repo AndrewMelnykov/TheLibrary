@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {% block content %}
-
+<br>
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 <form method="POST">
     {{book_form.hidden_tag()}}
@@ -20,15 +20,18 @@
     <br>
     {{book_form.submitbutton(class="btn btn-dark")}}
 </form>
-
+</div>
+<h4>Current books in whole library:</h4>
     <table class="table table table-dark table-hover table-striped">
-    <th>title</th>
-    <th>author</th>
-    <th>year</th>
+    <th>Title</th>
+    <th>Author</th>
+    <th>Genre</th>
+    <th>Year</th>
     {%for book in books %}
 <tr>
     <td>{{book.title}}</td>
     <td>{{book.author_surname}} {{book.author_name}}</td>
+    <td>{{book.genre}}</td>
     <td>{{book.year}}</td>
 
 </tr>

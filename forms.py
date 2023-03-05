@@ -20,7 +20,7 @@ class BookForm(FlaskForm):
     genre = StringField("Genre", validators=[DataRequired()])
     description = TextAreaField("Description", validators=[DataRequired()])
     year = IntegerField("Year Published", validators=[DataRequired()])
-    submitbutton = SubmitField("Submit")
+    submitbutton = SubmitField("Add Book")
 
 
 class SignupForm(FlaskForm):

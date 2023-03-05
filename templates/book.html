@@ -26,8 +26,8 @@
     {{review_form.hidden_tag()}}
     {{review_form.text.label}}
     {{review_form.text(class="form-control")}}
-    {{review_form.rating.label}}
-    {{review_form.rating(class="form-control")}}
+    {{review_form.rating.label()}}
+    {{review_form.rating(class="form-check")}}
     <br>
     {{review_form.submitbutton(class="btn btn-dark")}}
 </form>
@@ -41,12 +41,13 @@
 <h3>Reviews</h3>
 {% for review in reviews%}
 <div class="card">
-      <h5 class="card-header">User: {{review.reviewer.email}}</h5>
+      <h5 class="card-header bg-info-subtle">User: {{review.reviewer.email}}</h5>
       <div class="card-body">
-        <h5 class="card-title">Rating: {{review.rating}}</h5>
+        <h5 class="card-title">Stars: {{review.rating}}</h5>
         <p class="card-text">Review: {{review.text}}</p>
       </div>
 </div>
+<br>
 {%endfor%}
 {%else%}
 <h6>There is no reviews yet</h6>
