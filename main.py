@@ -1,8 +1,8 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask, render_template, flash, redirect, url_for, jsonify
 from forms import LoginForm, SignupForm, ReveiwForm, BookForm
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin, login_user, login_required, logout_user, current_user, LoginManager
+from flask_login import login_user, login_required, logout_user, current_user, LoginManager
 from flask_migrate import Migrate
 
 #app config logic
@@ -120,6 +120,21 @@ def signup():
     all_users = Users.query.order_by(Users.date_added)
     return render_template("signup.html", signup_form=signup_form, all_users = all_users)
 
+@app.route('/api/get/books')
+def api():
+    books = Book.query.order_by(Book.id).all()
+    result_array = {}
+    i=0
+    for book in books:
+        result_array[book.id] = {
+                  'title' : book.title,
+                   'author': book.author_name+' '+book.author_surname,
+                   "year": book.year,
+                   'genre': book.genre,
+                   'description': book.description}
+        i+=1
+
+    return result_array
 
 @app.errorhandler(404)
 def page_not_found(e):
