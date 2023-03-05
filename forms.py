@@ -15,9 +15,11 @@ class ReveiwForm(FlaskForm):
 
 class BookForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
-    author_name = StringField("Name", validators=[DataRequired()])
-    author_surname = StringField("Surname", validators=[DataRequired()])
-    year = IntegerField("Year", validators=[DataRequired()])
+    author_name = StringField("Author's name", validators=[DataRequired()])
+    author_surname = StringField("Author's surname", validators=[DataRequired()])
+    genre = StringField("Genre", validators=[DataRequired()])
+    description = TextAreaField("Description", validators=[DataRequired()])
+    year = IntegerField("Year Published", validators=[DataRequired()])
     submitbutton = SubmitField("Submit")
 
 

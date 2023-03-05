@@ -3,15 +3,7 @@
 {% block content %}
 <br>
 {% if current_user.is_authenticated %}
-<form method="POST" >
-    {{review_form.hidden_tag()}}
-    {{review_form.text.label}}
-    {{review_form.text(class="form-control")}}
-    {{review_form.rating.label}}
-    {{review_form.rating(class="form-control form-check")}}
-    <br>
-    {{review_form.submitbutton(class="btn btn-dark")}}
-</form>
+
 <h1>Welcome to your personal library</h1>
 <p>You can review all books that you currently have!</p>
 <br>
@@ -19,18 +11,21 @@
 <p class="alert alert-success" >{{message}}</p>
 {% endfor %}
 
-<table class="table table table-dark table-hover table-striped">
-    <th>review</th>
-    <th>rating</th>
-    <th>author</th>
-{%for review in all_reviews%}
-<tr>
-    <td>{{review.text}}</td>
-    <td>{{review.rating}}</td>
-    <td>{{review.reviewer.username}}</td>
-</tr>
-{%endfor%}
-</table>
+{% for book in all_books %}
+    <div class="card">
+      <h5 class="card-header"> {{book.title}}</h5>
+      <div class="card-body">
+          <p class="card-text"><strong>Author</strong> {{book.stored_book.author_name}} {{book.stored_book.author_surname}}</p>
+          <p class="card-text"><strong>Year:</strong> {{book.stored_book.year}}</p>
+          <p class="card-text"><strong>Genre:</strong> {{book.stored_book.genre}}</p>
+          <p class="card-text"><strong>Description:</strong> {{book.stored_book.description}}</p>
+
+          <a href={{url_for('book', id=book.id)}}  class="btn btn-success">To the book</a>
+          <a href={{url_for('home')}}  class="btn btn-warning">To the Library</a>
+      </div>
+    </div>
+{% endfor %}
+
 {% endif %}
 
 {% endblock %}

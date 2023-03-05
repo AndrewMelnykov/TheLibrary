@@ -13,6 +13,7 @@ class Users(db.Model, UserMixin):
     date_added = db.Column(db.DateTime, default=datetime.utcnow())
     #User can have many reviews
     reviews = db.relationship("Review", backref='reviewer')
+    books = db.relationship("Library", backref='reader')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -30,8 +31,11 @@ class Book(db.Model):
     author_name = db.Column(db.String(100), nullable=False, unique=False)
     author_surname = db.Column(db.String(100), nullable=True, unique=False)
     year = db.Column(db.String(100), nullable=False, unique=False)
+    genre = db.Column(db.String(50), nullable=False, unique=False)
+    description = db.Column(db.Text)
     reviews = db.relationship("Review", backref='reviewed_book')
-    #readers =
+    reader = db.relationship("Library", backref='stored_book')
+
 
 
 class Review(db.Model):
@@ -40,5 +44,9 @@ class Review(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     reviewer_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     book_id = db.Column(db.Integer, db.ForeignKey("book.id"))
-    #reviews =
-    #readers =
+
+
+class Library(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    book_id = db.Column(db.Integer, db.ForeignKey("book.id"))

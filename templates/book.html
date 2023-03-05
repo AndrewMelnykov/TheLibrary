@@ -2,10 +2,25 @@
 
 {% block content %}
 <br>
-<h1>{{book.title}}</h1>
-<p>{{book.author_name}} {{book.author_surname}}</p>
+<h1>{{book.title}} - {{book.author_name}} {{book.author_surname}}</h1>
+
+<div class="card">
+    <h5 class="card-header">Information about the book</h5>
+<div class="card-body">
+    <p class="card-text"><strong>Year:</strong> {{book.year}}</p>
+    <p class="card-text"><strong>Genre:</strong> {{book.genre}}</p>
+    <p class="card-text"><strong>Description:</strong> {{book.description}}</p>
+
+    <a href={{url_for('my_books')}}  class="btn btn-primary">To my books</a>
+          {% if current_user.is_authenticated%}
+        <a href={{url_for('home')}}  class="btn btn-warning">Back to books list</a>
+          {% endif %}
+</div>
+</div>
+
+<br><br>
 {% if current_user.is_authenticated %}
-<h1>Write a review to this book</h1>
+<h5>Write a review to this book</h5>
 <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
 <form method="POST">
     {{review_form.hidden_tag()}}
@@ -17,18 +32,27 @@
     {{review_form.submitbutton(class="btn btn-dark")}}
 </form>
 </div>
+{% else %}
+<h6>To write reviews please <a href="{{url_for('login')}}"><button class="btn btn-outline-dark" type="submit">Login</button></a> </h6>
 {%endif%}
-<h2>Reviews</h2>
+
+<br>
+{%if reviews%}
+<h3>Reviews</h3>
 {% for review in reviews%}
 <div class="card">
-      <h5 class="card-header"> {{review.reviewer.email}}</h5>
+      <h5 class="card-header">User: {{review.reviewer.email}}</h5>
       <div class="card-body">
-        <h5 class="card-title">{{review.rating}}</h5>
-        <p class="card-text">Year: {{review.text}}</p>
+        <h5 class="card-title">Rating: {{review.rating}}</h5>
+        <p class="card-text">Review: {{review.text}}</p>
       </div>
 </div>
-
 {%endfor%}
+{%else%}
+<h6>There is no reviews yet</h6>
+{%endif%}
+
+
 
 
 

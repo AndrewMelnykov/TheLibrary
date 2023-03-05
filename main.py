@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///users.db"
 db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = 'dev_secret_key'
 
-from models.db_models import Users, Review, Book
+from models.db_models import Users, Review, Book, Library
 
 #Login logic
 login_manager = LoginManager()
@@ -34,10 +34,11 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/addbook', methods=['GET', 'POST'])
+@login_required
 def addbook():
     book_form = BookForm()
     if book_form.validate_on_submit():
-        book = Book(title=book_form.title.data, author_name=book_form.author_name.data, author_surname=book_form.author_surname.data, year=book_form.year.data)
+        book = Book(title=book_form.title.data, author_name=book_form.author_name.data, author_surname=book_form.author_surname.data, year=book_form.year.data, genre=book_form.genre.data, description=book_form.description.data)
         db.session.add(book)
         db.session.commit()
     books = Book.query.all()
@@ -52,28 +53,33 @@ def home():
 @app.route('/books/<id>', methods=["GET", "POST"])
 def book(id):
     book = Book.query.get_or_404(id)
-
     review_form = ReveiwForm()
     if review_form.validate_on_submit():
         review = Review(text = review_form.text.data, rating = review_form.rating.data, reviewer_id=current_user.id, book_id=book.id)
+        review_form.text.data = None
+        review_form.rating.data = None
         db.session.add(review)
         db.session.commit()
     reviews = Review.query.filter_by(book_id=book.id).all()
     return render_template("book.html", book=book, reviews=reviews, review_form=review_form)
 
+@app.route('/book/add/<id>', methods=['GET', 'POST'])
+def add_to_library(id):
+    book = Book.query.get_or_404(id)
+    if Library.query.filter_by(book_id=book.id, user_id = current_user.id).all():
+       flash("You already have this book in your library!")
+    else:
+        library = Library(user_id=current_user.id , book_id=book.id)
+        db.session.add(library)
+        db.session.commit()
+
+    return redirect(url_for('my_books'))
 
 @app.route('/mybooks', methods = ['GET', 'POST'])
 @login_required
 def my_books():
-    flash("You've been successfully logged in!")
-
-    review_form = ReveiwForm()
-    if review_form.validate_on_submit():
-        review = Review(text = review_form.text.data, rating = review_form.rating.data, reviewer_id=current_user.id)
-        db.session.add(review)
-        db.session.commit()
-    all_reviews = Review.query.order_by(Review.id)
-    return render_template("mybooks.html", all_reviews=all_reviews, review_form=review_form)
+    all_books = Library.query.filter_by(user_id=current_user.id)
+    return render_template("mybooks.html", all_books=all_books)
 
 @app.route('/authors')
 def authors():
