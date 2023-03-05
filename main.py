@@ -63,6 +63,17 @@ def book(id):
     reviews = Review.query.filter_by(book_id=book.id).all()
     return render_template("book.html", book=book, reviews=reviews, review_form=review_form)
 
+@app.route('/book/remove/<id>', methods=['GET', 'POST'])
+def remove_from_library(id):
+    book = Book.query.get_or_404(id)
+    library = Library.query.filter_by(book_id=book.id, user_id = current_user.id).first()
+    if library:
+        db.session.delete(library)
+        db.session.commit()
+    else:
+        flash("something went wrong, try again!")
+    return redirect(url_for('my_books'))
+
 @app.route('/book/add/<id>', methods=['GET', 'POST'])
 def add_to_library(id):
     book = Book.query.get_or_404(id)

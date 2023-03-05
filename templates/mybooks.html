@@ -13,15 +13,16 @@
 
 {% for book in all_books %}
     <div class="card">
-      <h5 class="card-header"> {{book.title}}</h5>
+      <h5 class="card-header"> {{book.stored_book.title}} </h5>
       <div class="card-body">
           <p class="card-text"><strong>Author</strong> {{book.stored_book.author_name}} {{book.stored_book.author_surname}}</p>
           <p class="card-text"><strong>Year:</strong> {{book.stored_book.year}}</p>
           <p class="card-text"><strong>Genre:</strong> {{book.stored_book.genre}}</p>
           <p class="card-text"><strong>Description:</strong> {{book.stored_book.description}}</p>
 
-          <a href={{url_for('book', id=book.id)}}  class="btn btn-success">To the book</a>
+          <a href={{url_for('book', id=book.stored_book.id)}}  class="btn btn-success">To the book</a>
           <a href={{url_for('home')}}  class="btn btn-warning">To the Library</a>
+          <a href={{url_for('remove_from_library', id=book.stored_book.id)}}  class="btn btn-danger">Remove</a>
       </div>
     </div>
 <br>
