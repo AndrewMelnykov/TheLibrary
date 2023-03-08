@@ -12,7 +12,9 @@ db = SQLAlchemy(app)
 app.config['SECRET_KEY'] = 'dev_secret_key'
 
 from models.db_models import Users, Review, Book, Library
+from rest.rest import api_routes
 
+app.register_blueprint(api_routes)
 #Login logic
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -166,22 +168,6 @@ def signup():
         signup_form.email.data = ""
     all_users = Users.query.order_by(Users.date_added)
     return render_template("signup.html", signup_form=signup_form, all_users = all_users)
-
-@app.route('/api/get/books')
-def api():
-    books = Book.query.order_by(Book.id).all()
-    result_array = {}
-    i=0
-    for book in books:
-        result_array[book.id] = {
-                  'title' : book.title,
-                   'author': book.author_name+' '+book.author_surname,
-                   "year": book.year,
-                   'genre': book.genre,
-                   'description': book.description}
-        i+=1
-
-    return result_array
 
 @app.errorhandler(404)
 def page_not_found(e):
