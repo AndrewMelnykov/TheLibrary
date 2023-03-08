@@ -41,11 +41,16 @@
 <h3>Reviews</h3>
 {% for review in reviews%}
 <div class="card">
-      <h5 class="card-header bg-info-subtle">User: {{review.reviewer.email}}</h5>
+      <h5 class="card-header bg-info-subtle">{{review.reviewer.username}} {%if current_user.id == review.reviewer_id %} <a class="btn btn-outline-success" href="{{url_for('edit_review', id=review.id)}}">Edit</a> <a class="btn btn-outline-danger" href="{{url_for('delete_review', id=review.id)}}">Delete</a>{% endif %}</h5>
       <div class="card-body">
         <h5 class="card-title">Stars: {{review.rating}}</h5>
         <p class="card-text">Review: {{review.text}}</p>
+
       </div>
+
+
+
+
 </div>
 <br>
 {%endfor%}

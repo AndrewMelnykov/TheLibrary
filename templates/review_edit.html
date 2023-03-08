@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<h5>Update a review to this book</h5>
+<div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+<form method="POST">
+    {{review_form.hidden_tag()}}
+    {{review_form.text.label}}
+    {{review_form.text(class="form-control")}}
+    {{review_form.rating.label()}}
+    {{review_form.rating(class="form-check")}}
+    <br>
+    {{review_form.submitbutton(class="btn btn-dark")}}
+</form>
+</div>
+{%for message in get_flashed_messages()%}
+{{message}}
+{%endfor%}
+
+{% endblock %}

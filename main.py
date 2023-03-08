@@ -50,7 +50,41 @@ def home():
     books = Book.query.order_by(Book.id)
     return render_template("home.html", books=books)
 
+@app.route('/delete/review/<int:id>', methods=["GET", "POST"])
+@login_required
+def delete_review(id):
+    review = Review.query.get_or_404(id)
+    if current_user.id == review.reviewer_id:
+        if review:
+            db.session.delete(review)
+            db.session.commit()
+        else:
+            flash("something went with the review, try again!")
+    else: flash("You have no permission to delete this review!")
+    return redirect(url_for("book", id=review.book_id))
+
+
+
+@app.route('/edit/review/<int:id>', methods=["GET", "POST"])
+@login_required
+def edit_review(id):
+    review = Review.query.get_or_404(id)
+    review_form = ReveiwForm()
+
+    if review_form.validate_on_submit():
+
+        review.text = review_form.text.data
+        review.rating = review_form.rating.data
+        db.session.commit()
+        flash("Success!")
+        return redirect(url_for('book', id=review.book_id))
+    review_form.rating.data = review.rating
+    review_form.text.data = review.text
+    return render_template("review_edit.html", review_form=review_form, review=review)
+
+
 @app.route('/books/<id>', methods=["GET", "POST"])
+@login_required
 def book(id):
     book = Book.query.get_or_404(id)
     review_form = ReveiwForm()
@@ -64,6 +98,7 @@ def book(id):
     return render_template("book.html", book=book, reviews=reviews, review_form=review_form)
 
 @app.route('/book/remove/<id>', methods=['GET', 'POST'])
+@login_required
 def remove_from_library(id):
     book = Book.query.get_or_404(id)
     library = Library.query.filter_by(book_id=book.id, user_id = current_user.id).first()
@@ -75,6 +110,7 @@ def remove_from_library(id):
     return redirect(url_for('my_books'))
 
 @app.route('/book/add/<id>', methods=['GET', 'POST'])
+@login_required
 def add_to_library(id):
     book = Book.query.get_or_404(id)
     if Library.query.filter_by(book_id=book.id, user_id = current_user.id).all():

@@ -10,7 +10,7 @@ class LoginForm(FlaskForm):
 
 class ReveiwForm(FlaskForm):
     text = TextAreaField("Review", validators=[DataRequired()])
-    rating = RadioField('Rating', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
+    rating = RadioField('Rating', choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')], validators=[DataRequired()])
     submitbutton = SubmitField("Submit")
 
 class BookForm(FlaskForm):
