@@ -63,10 +63,13 @@ def api_edit_book(id):
     if book:
         author_name = request.json['author_name']
         author_surname = request.json['author_surname']
-
-        book.author_name = author_name
-        book.author_surname = author_surname
-
+        genre = request.json['genre']
+        year = request.json['year']
+        title = request.json['title']
+        book.author_name = author_name+author_surname
+        book.genre = genre
+        book.year = year
+        book.title = title
         db.session.commit()
 
     return "Success"
